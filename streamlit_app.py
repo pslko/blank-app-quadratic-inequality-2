@@ -26,8 +26,21 @@ with st.sidebar:
             st.markdown("**다른 페이지**")
             for _, p in pages.items():
                 display_name = p.display_name if hasattr(p, "display_name") else p.get("display_name", str(p))
-                href = f"?page={urllib.parse.quote_plus(display_name)}"
-                st.markdown(f"- [{display_name}]({href})")
+                btn_key = f"nav_{display_name}"
+                try:
+                    if st.button(display_name, key=btn_key):
+                        # set query param if available, then rerun to navigate
+                        try:
+                            if hasattr(st, "experimental_set_query_params"):
+                                st.experimental_set_query_params(page=display_name)
+                        except Exception:
+                            pass
+                        try:
+                            st.experimental_rerun()
+                        except Exception:
+                            pass
+                except Exception:
+                    st.markdown(f"- {display_name}")
         else:
             # experimental_get_pages가 없거나 빈 경우: pages 디렉터리의 파일명으로 폴백
             import os
@@ -43,7 +56,20 @@ with st.sidebar:
                 st.markdown("**다른 페이지**")
                 for fname in page_files:
                     label = os.path.splitext(fname)[0].replace("_", " ")
-                    st.write(f"- {label}")
+                    btn_key = f"nav_{fname}"
+                    try:
+                        if st.button(label, key=btn_key):
+                            try:
+                                if hasattr(st, "experimental_set_query_params"):
+                                    st.experimental_set_query_params(page=label)
+                            except Exception:
+                                pass
+                            try:
+                                st.experimental_rerun()
+                            except Exception:
+                                pass
+                    except Exception:
+                        st.write(f"- {label}")
             else:
                 st.write("(페이지 없음)")
 
