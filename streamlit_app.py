@@ -79,44 +79,27 @@ div[data-testid="stSidebar"] {
     background-color: #1f2937 !important;
 }
 
-/* 사이드바 내부 모든 글씨 강제 흰색 */
 section[data-testid="stSidebar"] *,
 div[data-testid="stSidebar"] * {
-    color: white !important;
-}
-
-/* 사이드바 info 박스 */
-section[data-testid="stSidebar"] .stAlert,
-div[data-testid="stSidebar"] .stAlert {
-    background-color: #374151 !important;
-}
-
-section[data-testid="stSidebar"] .stAlert *,
-div[data-testid="stSidebar"] .stAlert * {
     color: white !important;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# -----------------------------
-# 문제 여러 개 준비
-# -----------------------------
 problem_bank = {
     "D>0": [
-        x**2 - 6*x + 5,      # (x-1)(x-5)
-        x**2 - 8*x + 12,     # (x-2)(x-6)
-        x**2 - 10*x + 16,    # (x-2)(x-8)
-        x**2 - 7*x + 10,     # (x-2)(x-5)
-        x**2 - 9*x + 18,     # (x-3)(x-6)
+        x**2 - 6*x + 5,
+        x**2 - 8*x + 12,
+        x**2 - 10*x + 16,
+        x**2 - 7*x + 10,
+        x**2 - 9*x + 18,
     ],
-
     "D=0": [
-        x**2 - 4*x + 4,      # (x-2)^2
-        x**2 + 6*x + 9,      # (x+3)^2
-        x**2 - 10*x + 25,    # (x-5)^2
-        x**2 + 2*x + 1,      # (x+1)^2
+        x**2 - 4*x + 4,
+        x**2 + 6*x + 9,
+        x**2 - 10*x + 25,
+        x**2 + 2*x + 1,
     ],
-
     "D<0": [
         x**2 + 4,
         x**2 + 2*x + 5,
@@ -131,9 +114,6 @@ step_info = {
     "D<0": {"step": "Step 3", "d": "D < 0"}
 }
 
-# -----------------------------
-# 사이드바
-# -----------------------------
 with st.sidebar:
     st.header("📌 학습목표")
     st.write("""
@@ -157,9 +137,6 @@ with st.sidebar:
     등호 포함 : x절편 포함
     """)
 
-# -----------------------------
-# 상태값
-# -----------------------------
 default_states = {
     "step": None,
     "expr": None,
@@ -174,9 +151,6 @@ for k, v in default_states.items():
     if k not in st.session_state:
         st.session_state[k] = v
 
-# -----------------------------
-# 함수
-# -----------------------------
 def new_problem(step):
     st.session_state.step = step
     st.session_state.expr = random.choice(problem_bank[step])
@@ -238,17 +212,17 @@ def correct_answer(expr, ineq):
     if len(roots) == 1:
         r = root_text(roots[0])
         return {
-            ">": f"x ≠ {r}",
-            "<": "해 없음",
+            ">": f"x ≠ {r}인 모든 실수",
+            "<": "해는 없다",
             "≥": "모든 실수",
             "≤": f"x = {r}"
         }[ineq]
 
     return {
         ">": "모든 실수",
-        "<": "해 없음",
+        "<": "해는 없다",
         "≥": "모든 실수",
-        "≤": "해 없음"
+        "≤": "해는 없다"
     }[ineq]
 
 def answer_options(expr):
@@ -262,23 +236,21 @@ def answer_options(expr):
             f"x ≤ {r1} 또는 x ≥ {r2}",
             f"{r1} ≤ x ≤ {r2}",
             "모든 실수",
-            "해 없음"
+            "해는 없다"
         ]
 
     if len(roots) == 1:
         r = root_text(roots[0])
         return [
-            f"x ≠ {r}",
             f"x = {r}",
+            f"x ≠ {r}인 모든 실수",
             "모든 실수",
-            "해 없음",
-            f"x < {r} 또는 x > {r}",
-            f"x ≤ {r} 또는 x ≥ {r}"
+            "해는 없다"
         ]
 
     return [
         "모든 실수",
-        "해 없음",
+        "해는 없다",
         "x > 0",
         "x < 0",
         "x ≠ 0",
@@ -323,9 +295,6 @@ def draw_graph(expr, ineq=None):
 
     return fig
 
-# -----------------------------
-# 메인
-# -----------------------------
 st.markdown("<div class='main-title'>📈 이차부등식 범위 찾는 학습</div>", unsafe_allow_html=True)
 st.markdown("<div class='sub-title'>인수분해 → 그래프 확인 → 부등호 선택 → 해의 범위 찾기</div>", unsafe_allow_html=True)
 
@@ -380,7 +349,7 @@ else:
 
     st.write("블럭을 선택하여 인수분해 형태를 만드세요.")
 
-    b1, b2, b3, b4, b5, b6, b7 = st.columns([1, 1, 1, 1, 1, 1.4, 1])
+    b1, b2, b3, b4, b5, b6, b7, b8 = st.columns([1, 1, 1, 1, 1, 1, 1.4, 1])
 
     with b1:
         st.button("(", use_container_width=True, on_click=add_token, args=("(",))
@@ -393,8 +362,10 @@ else:
     with b5:
         st.button(")", use_container_width=True, on_click=add_token, args=(")",))
     with b6:
-        num = st.number_input("숫자 입력", min_value=0, max_value=20, value=1, step=1, label_visibility="collapsed")
+        st.button("²", use_container_width=True, on_click=add_token, args=("^2",))
     with b7:
+        num = st.number_input("숫자 입력", min_value=0, max_value=20, value=1, step=1, label_visibility="collapsed")
+    with b8:
         st.button("추가", use_container_width=True, on_click=add_token, args=(str(num),))
 
     col_a, col_b = st.columns([1, 1])
