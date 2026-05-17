@@ -6,6 +6,35 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+with st.sidebar:
+    st.header("📌 학습목표")
+    st.write(
+        """
+        이차부등식과 이차함수를 연결하여
+        그 관계를 설명하고 이차부등식을 풀 수 있다.
+        """
+    )
+
+    st.header("🧭 사용법")
+    st.write(
+        """
+        1. 왼쪽 페이지 목록에서 학습 페이지를 선택합니다.
+        2. 단계별 학습 또는 자유 식 확인을 진행합니다.
+        3. 수식 버튼으로 식을 입력합니다.
+        4. 그래프를 보고 해의 범위를 찾습니다.
+        5. 정답 확인을 통해 풀이를 점검합니다.
+        """
+    )
+
+    st.header("💡 핵심")
+    st.write(
+        """
+        f(x) > 0 : 그래프가 x축보다 위
+        f(x) < 0 : 그래프가 x축보다 아래
+        등호 포함 : x절편 포함
+        """
+    )
+
 
 st.markdown("""
 <style>
