@@ -7,7 +7,13 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-query_params = st.experimental_get_query_params()
+try:
+    if hasattr(st, "experimental_get_query_params"):
+        query_params = st.experimental_get_query_params()
+    else:
+        query_params = {}
+except Exception:
+    query_params = {}
 
 # 루트 페이지(`streamlit_app.py`)일 때만 설명을 빼고 페이지 목록만 표시합니다.
 if not query_params.get("page"):
