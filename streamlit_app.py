@@ -7,75 +7,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-try:
-    if hasattr(st, "experimental_get_query_params"):
-        query_params = st.experimental_get_query_params()
-    else:
-        query_params = {}
-except Exception:
-    query_params = {}
 
-# 사이드바: 항상 표시하되, 루트 페이지일 땐 설명 없이 다른 페이지 목록만 보입니다.
-with st.sidebar:
-    try:
-        pages = {}
-        if hasattr(st, "experimental_get_pages"):
-            pages = st.experimental_get_pages() or {}
-
-        if pages:
-            st.markdown("**다른 페이지**")
-            for _, p in pages.items():
-                display_name = p.display_name if hasattr(p, "display_name") else p.get("display_name", str(p))
-                btn_key = f"nav_{display_name}"
-                try:
-                    if st.button(display_name, key=btn_key):
-                        # set query param if available, then rerun to navigate
-                        try:
-                            if hasattr(st, "experimental_set_query_params"):
-                                st.experimental_set_query_params(page=display_name)
-                        except Exception:
-                            pass
-                        try:
-                            st.experimental_rerun()
-                        except Exception:
-                            pass
-                except Exception:
-                    st.markdown(f"- {display_name}")
-        else:
-            # experimental_get_pages가 없거나 빈 경우: pages 디렉터리의 파일명으로 폴백
-            import os
-            page_files = []
-            try:
-                for fname in sorted(os.listdir("pages")):
-                    if fname.endswith(".py") and not fname.startswith("__"):
-                        page_files.append(fname)
-            except Exception:
-                page_files = []
-
-            if page_files:
-                st.markdown("**다른 페이지**")
-                for fname in page_files:
-                    label = os.path.splitext(fname)[0].replace("_", " ")
-                    btn_key = f"nav_{fname}"
-                    try:
-                        if st.button(label, key=btn_key):
-                            try:
-                                if hasattr(st, "experimental_set_query_params"):
-                                    st.experimental_set_query_params(page=label)
-                            except Exception:
-                                pass
-                            try:
-                                st.experimental_rerun()
-                            except Exception:
-                                pass
-                    except Exception:
-                        st.write(f"- {label}")
-            else:
-                st.write("(페이지 없음)")
-
-    except Exception:
-        # 사이드바 렌더링에서 치명적 오류가 나지 않도록 무시
-        pass
 
 
 st.markdown("""
