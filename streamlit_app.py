@@ -6,18 +6,6 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-st.sidebar.markdown("### 📌 학습 페이지 선택")
-if st.sidebar.button("이차부등식 범위 찾기"):
-    st.experimental_set_query_params(page="이차부등식 범위 찾기")
-    st.experimental_rerun()
-if st.sidebar.button("자유식 확인하기"):
-    st.experimental_set_query_params(page="자유식 확인하기")
-    st.experimental_rerun()
-
-st.sidebar.markdown("""
-- 위 버튼으로 페이지를 바로 이동할 수 있습니다.
-- 만약 기본 페이지 목록이 보이면 거기에서도 선택하세요.
-""")
 
 st.markdown("""
 <style>
