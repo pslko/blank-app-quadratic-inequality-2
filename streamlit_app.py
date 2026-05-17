@@ -7,48 +7,21 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-with st.sidebar:
-    st.header("📌 학습목표")
-    st.write(
-        """
-        이차부등식과 이차함수를 연결하여
-        그 관계를 설명하고 이차부등식을 풀 수 있다.
-        """
-    )
+query_params = st.experimental_get_query_params()
 
-    st.header("🧭 사용법")
-    st.write(
-        """
-        1. 왼쪽 페이지 목록에서 학습 페이지를 선택합니다.
-        2. 단계별 학습 또는 자유 식 확인을 진행합니다.
-        3. 수식 버튼으로 식을 입력합니다.
-        4. 그래프를 보고 해의 범위를 찾습니다.
-        5. 정답 확인을 통해 풀이를 점검합니다.
-        """
-    )
-
-    st.header("💡 핵심")
-    st.write(
-        """
-        f(x) > 0 : 그래프가 x축보다 위
-        f(x) < 0 : 그래프가 x축보다 아래
-        등호 포함 : x절편 포함
-        """
-    )
-
-    # 페이지 목록(데플로이에서 사이드바에 페이지가 보이지 않을 때 대비한 수동 링크)
-    try:
-        pages = st.experimental_get_pages()
-        if pages:
-            st.markdown("---")
-            st.markdown("**페이지로 이동**")
-            for _, p in pages.items():
-                # p may be a Page object or dict depending on streamlit version
-                display_name = p.display_name if hasattr(p, "display_name") else p.get("display_name", str(p))
-                href = f"?page={urllib.parse.quote_plus(display_name)}"
-                st.markdown(f"- [{display_name}]({href})")
-    except Exception:
-        pass
+# 루트 페이지(`streamlit_app.py`)일 때만 설명을 빼고 페이지 목록만 표시합니다.
+if not query_params.get("page"):
+    with st.sidebar:
+        try:
+            pages = st.experimental_get_pages()
+            if pages:
+                st.markdown("**다른 페이지**")
+                for _, p in pages.items():
+                    display_name = p.display_name if hasattr(p, "display_name") else p.get("display_name", str(p))
+                    href = f"?page={urllib.parse.quote_plus(display_name)}"
+                    st.markdown(f"- [{display_name}]({href})")
+        except Exception:
+            pass
 
 
 st.markdown("""
