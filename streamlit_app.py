@@ -15,19 +15,41 @@ try:
 except Exception:
     query_params = {}
 
-# 루트 페이지(`streamlit_app.py`)일 때만 설명을 빼고 페이지 목록만 표시합니다.
-if not query_params.get("page"):
-    with st.sidebar:
-        try:
-            pages = st.experimental_get_pages()
-            if pages:
+# 사이드바: 항상 표시하되, 루트 페이지일 땐 설명 없이 다른 페이지 목록만 보입니다.
+with st.sidebar:
+    try:
+        pages = {}
+        if hasattr(st, "experimental_get_pages"):
+            pages = st.experimental_get_pages() or {}
+
+        if pages:
+            st.markdown("**다른 페이지**")
+            for _, p in pages.items():
+                display_name = p.display_name if hasattr(p, "display_name") else p.get("display_name", str(p))
+                href = f"?page={urllib.parse.quote_plus(display_name)}"
+                st.markdown(f"- [{display_name}]({href})")
+        else:
+            # experimental_get_pages가 없거나 빈 경우: pages 디렉터리의 파일명으로 폴백
+            import os
+            page_files = []
+            try:
+                for fname in sorted(os.listdir("pages")):
+                    if fname.endswith(".py") and not fname.startswith("__"):
+                        page_files.append(fname)
+            except Exception:
+                page_files = []
+
+            if page_files:
                 st.markdown("**다른 페이지**")
-                for _, p in pages.items():
-                    display_name = p.display_name if hasattr(p, "display_name") else p.get("display_name", str(p))
-                    href = f"?page={urllib.parse.quote_plus(display_name)}"
-                    st.markdown(f"- [{display_name}]({href})")
-        except Exception:
-            pass
+                for fname in page_files:
+                    label = os.path.splitext(fname)[0].replace("_", " ")
+                    st.write(f"- {label}")
+            else:
+                st.write("(페이지 없음)")
+
+    except Exception:
+        # 사이드바 렌더링에서 치명적 오류가 나지 않도록 무시
+        pass
 
 
 st.markdown("""
