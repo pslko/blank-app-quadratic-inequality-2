@@ -1,4 +1,5 @@
 import streamlit as st
+import urllib.parse
 
 st.set_page_config(
     page_title="이차부등식 학습",
@@ -34,6 +35,20 @@ with st.sidebar:
         등호 포함 : x절편 포함
         """
     )
+
+    # 페이지 목록(데플로이에서 사이드바에 페이지가 보이지 않을 때 대비한 수동 링크)
+    try:
+        pages = st.experimental_get_pages()
+        if pages:
+            st.markdown("---")
+            st.markdown("**페이지로 이동**")
+            for _, p in pages.items():
+                # p may be a Page object or dict depending on streamlit version
+                display_name = p.display_name if hasattr(p, "display_name") else p.get("display_name", str(p))
+                href = f"?page={urllib.parse.quote_plus(display_name)}"
+                st.markdown(f"- [{display_name}]({href})")
+    except Exception:
+        pass
 
 
 st.markdown("""
