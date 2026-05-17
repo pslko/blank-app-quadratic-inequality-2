@@ -2,8 +2,17 @@ import streamlit as st
 
 st.set_page_config(
     page_title="이차부등식 학습",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
+
+with st.sidebar:
+    st.header("📌 학습 메뉴")
+    st.write("왼쪽에서 학습 페이지를 선택하세요.")
+    st.write("- 이차부등식 범위 찾기")
+    st.write("- 자유식 확인하기")
+    st.divider()
+    st.write("Streamlit 페이지 목록이 보이지 않으면 브라우저를 새로고침 해보세요.")
 
 st.markdown("""
 <style>
