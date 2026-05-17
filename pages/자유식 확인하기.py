@@ -3,8 +3,6 @@ import sympy as sp
 import numpy as np
 import matplotlib.pyplot as plt
 
-st.set_page_config(page_title="자유 식 확인하기", layout="wide")
-
 x = sp.symbols("x")
 
 st.markdown("""

@@ -4,8 +4,6 @@ import matplotlib.pyplot as plt
 import sympy as sp
 import random
 
-st.set_page_config(page_title="이차부등식 범위 찾기 학습", layout="wide")
-
 x = sp.symbols("x")
 
 st.markdown("""
